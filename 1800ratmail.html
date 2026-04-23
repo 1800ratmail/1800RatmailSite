@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>1800Ratmail</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Helvetica+Neue,Arial,sans-serif&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --hot-pink: #e8407a;
+  --black: #111;
+  --gray: #999;
+  --light-gray: #e8e8e8;
+  --white: #fff;
+}
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 3.5rem 0 0;
+  text-align: center;
+}
+
+.site-name {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--black);
+  cursor: default;
+  display: inline-block;
+  transition: color 0.2s, text-shadow 0.2s;
+  text-decoration: none;
+}
+
+.site-name:hover {
+  color: var(--hot-pink);
+  text-shadow: 0 0 18px rgba(232, 64, 122, 0.35);
+}
+
+nav {
+  margin-top: 1.1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  border-bottom: 1px solid var(--light-gray);
+  padding-bottom: 0;
+}
+
+nav a {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  color: var(--black);
+  text-decoration: none;
+  padding: 0.55rem 1.3rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, text-shadow 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+
+nav a:hover {
+  color: var(--hot-pink);
+  text-shadow: 0 0 14px rgba(232, 64, 122, 0.4);
+}
+
+nav a.active {
+  color: var(--black);
+  border-bottom-color: var(--black);
+}
+
+/* ── PAGES ── */
+.page { display: none; padding: 3rem 2.5rem 6rem; max-width: 1100px; margin: 0 auto; }
+.page.active { display: block; }
+
+/* ── WORK PAGE ── */
+.work-grid {
+  columns: 3;
+  column-gap: 12px;
+}
+
+@media (max-width: 800px) { .work-grid { columns: 2; } }
+@media (max-width: 500px) { .work-grid { columns: 1; } }
+
+.work-grid figure {
+  break-inside: avoid;
+  margin-bottom: 12px;
+  cursor: zoom-in;
+  position: relative;
+  overflow: hidden;
+}
+
+.work-grid figure svg,
+.work-grid figure img {
+  display: block;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+
+.work-grid figure:hover svg,
+.work-grid figure:hover img {
+  opacity: 0.88;
+}
+
+.work-grid figcaption {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 5px;
+  letter-spacing: 0.03em;
+  font-style: italic;
+}
+
+/* ── LIGHTBOX ── */
+#lb {
+  display: none;
+  position: fixed; inset: 0; z-index: 999;
+  background: rgba(255,255,255,0.96);
+  align-items: center; justify-content: center;
+  cursor: zoom-out;
+}
+
+#lb.open { display: flex; }
+
+#lb-inner {
+  max-width: 80vw;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#lb-inner svg,
+#lb-inner img {
+  max-width: 80vw;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  display: block;
+}
+
+#lb-caption {
+  font-size: 12px;
+  color: var(--gray);
+  font-style: italic;
+  letter-spacing: 0.03em;
+}
+
+#lb-close {
+  position: fixed;
+  top: 1.5rem; right: 2rem;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  color: var(--gray);
+  background: none; border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+#lb-close:hover { color: var(--hot-pink); }
+
+/* Prev / Next */
+.lb-arrow {
+  position: fixed;
+  top: 50%; transform: translateY(-50%);
+  background: none; border: none;
+  font-size: 1.4rem; color: var(--light-gray);
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 1rem;
+  line-height: 1;
+}
+
+.lb-arrow:hover { color: var(--hot-pink); }
+#lb-prev { left: 1rem; }
+#lb-next { right: 1rem; }
+
+/* ── SKETCHBOOK PAGE ── */
+.sketch-grid {
+  columns: 4;
+  column-gap: 10px;
+}
+
+@media (max-width: 800px) { .sketch-grid { columns: 3; } }
+@media (max-width: 500px) { .sketch-grid { columns: 2; } }
+
+.sketch-grid figure {
+  break-inside: avoid;
+  margin-bottom: 10px;
+}
+
+.sketch-grid figure svg,
+.sketch-grid figure img {
+  display: block; width: 100%;
+}
+
+/* ── ABOUT PAGE ── */
+.about-wrap {
+  max-width: 560px;
+}
+
+.about-wrap h2 {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.6rem; font-weight: 400;
+  margin-bottom: 1.2rem;
+}
+
+.about-wrap p {
+  font-size: 14px; line-height: 1.85;
+  color: #333; margin-bottom: 1rem;
+}
+
+/* ── CONTACT PAGE ── */
+.contact-wrap { max-width: 440px; }
+
+.contact-wrap h2 {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.6rem; font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.contact-wrap > p {
+  font-size: 13px; color: var(--gray); margin-bottom: 2rem; line-height: 1.7;
+}
+
+.form-stack { display: flex; flex-direction: column; gap: 1rem; }
+
+.form-stack label {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: lowercase;
+  color: var(--gray); display: block; margin-bottom: 4px;
+}
+
+.form-stack input,
+.form-stack textarea {
+  width: 100%;
+  padding: 0.55rem 0;
+  border: none;
+  border-bottom: 1px solid var(--light-gray);
+  font-family: inherit; font-size: 13px;
+  color: var(--black); background: transparent;
+  outline: none;
+  transition: border-color 0.2s;
+  border-radius: 0;
+}
+
+.form-stack input:focus,
+.form-stack textarea:focus { border-bottom-color: var(--black); }
+
+.form-stack textarea { min-height: 100px; resize: vertical; }
+
+.btn-send {
+  align-self: flex-start;
+  background: none;
+  border: 1px solid var(--black);
+  padding: 0.5rem 1.8rem;
+  font-family: inherit; font-size: 11px;
+  letter-spacing: 0.12em; text-transform: lowercase;
+  cursor: pointer; color: var(--black);
+  transition: color 0.2s, border-color 0.2s, text-shadow 0.2s;
+  margin-top: 0.5rem;
+}
+
+.btn-send:hover {
+  color: var(--hot-pink);
+  border-color: var(--hot-pink);
+  text-shadow: 0 0 10px rgba(232,64,122,0.3);
+}
+
+.form-ok {
+  display: none; font-size: 12px;
+  color: var(--gray); font-style: italic;
+  margin-top: 0.75rem; letter-spacing: 0.04em;
+}
+
+/* ── SHOP PAGE ── */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem 1.5rem;
+}
+
+@media (max-width: 800px) { .shop-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 500px) { .shop-grid { grid-template-columns: 1fr; } }
+
+.shop-item figure { cursor: default; }
+
+.shop-item figure svg,
+.shop-item figure img { display: block; width: 100%; }
+
+.shop-info { margin-top: 0.6rem; }
+
+.shop-title { font-size: 13px; color: var(--black); }
+
+.shop-price {
+  font-size: 12px; color: var(--gray);
+  margin-top: 2px;
+}
+
+.shop-btn {
+  display: inline-block; margin-top: 0.6rem;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: lowercase;
+  color: var(--black); text-decoration: none;
+  border-bottom: 1px solid var(--black);
+  transition: color 0.2s, border-color 0.2s, text-shadow 0.2s;
+  padding-bottom: 1px;
+}
+
+.shop-btn:hover {
+  color: var(--hot-pink);
+  border-color: var(--hot-pink);
+  text-shadow: 0 0 10px rgba(232,64,122,0.3);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="site-name" href="#" onclick="showPage('work'); return false;">1800Ratmail</a>
+  <nav>
+    <a href="#" class="active" id="tab-work"      onclick="showPage('work');       return false;">work</a>
+    <a href="#" id="tab-sketchbook" onclick="showPage('sketchbook'); return false;">sketchbook</a>
+    <a href="#" id="tab-about"      onclick="showPage('about');      return false;">about</a>
+    <a href="#" id="tab-contact"    onclick="showPage('contact');    return false;">contact</a>
+    <a href="#" id="tab-shop"       onclick="showPage('shop');       return false;">shop</a>
+  </nav>
+</header>
+
+<!-- ── WORK ── -->
+<section class="page active" id="page-work">
+  <div class="work-grid" id="work-grid">
+
+    <figure onclick="openLB(0)">
+      <svg viewBox="0 0 600 750" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="750" fill="#f0ece4"/>
+        <circle cx="300" cy="340" r="180" fill="none" stroke="#c8bfb0" stroke-width="1.5"/>
+        <circle cx="300" cy="340" r="90"  fill="#d8d0c0" opacity="0.4"/>
+        <ellipse cx="300" cy="340" rx="60" ry="180" fill="none" stroke="#a09080" stroke-width="1"/>
+        <ellipse cx="300" cy="340" rx="180" ry="60" fill="none" stroke="#a09080" stroke-width="1"/>
+        <circle cx="300" cy="340" r="8" fill="#a09080"/>
+      </svg>
+      <figcaption>Untitled I, 2024</figcaption>
+    </figure>
+
+    <figure onclick="openLB(1)">
+      <svg viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="800" fill="#e8e4dc"/>
+        <path d="M 100 400 Q 300 100 500 400 Q 300 700 100 400 Z" fill="none" stroke="#b0a898" stroke-width="1.2"/>
+        <path d="M 150 400 Q 300 180 450 400 Q 300 620 150 400 Z" fill="#c8c0b0" opacity="0.25"/>
+        <circle cx="300" cy="400" r="40" fill="none" stroke="#b0a898" stroke-width="1.2"/>
+        <circle cx="300" cy="400" r="9" fill="#a09080"/>
+        <line x1="300" y1="150" x2="300" y2="650" stroke="#d0c8bc" stroke-width="0.6" stroke-dasharray="4 6"/>
+      </svg>
+      <figcaption>Solstice, 2024</figcaption>
+    </figure>
+
+    <figure onclick="openLB(2)">
+      <svg viewBox="0 0 600 680" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="680" fill="#ede8e0"/>
+        <rect x="100" y="100" width="400" height="480" fill="none" stroke="#c0b8a8" stroke-width="1.2"/>
+        <rect x="140" y="140" width="320" height="400" fill="none" stroke="#a09080" stroke-width="0.7" stroke-dasharray="3 6"/>
+        <circle cx="300" cy="340" r="70" fill="#d0c8b8" opacity="0.35"/>
+        <circle cx="300" cy="340" r="14" fill="#a09080"/>
+        <line x1="100" y1="340" x2="500" y2="340" stroke="#d8d0c4" stroke-width="0.6"/>
+      </svg>
+      <figcaption>Meridian, 2023</figcaption>
+    </figure>
+
+    <figure onclick="openLB(3)">
+      <svg viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="900" fill="#e4e0d8"/>
+        <line x1="80" y1="120" x2="520" y2="780" stroke="#c8bfb0" stroke-width="1"/>
+        <line x1="520" y1="120" x2="80"  y2="780" stroke="#c8bfb0" stroke-width="1"/>
+        <circle cx="300" cy="450" r="140" fill="none" stroke="#a09080" stroke-width="1.2"/>
+        <circle cx="300" cy="450" r="80"  fill="none" stroke="#b8b0a0" stroke-width="0.7" stroke-dasharray="3 5"/>
+        <circle cx="300" cy="450" r="20"  fill="#a09080" opacity="0.8"/>
+        <circle cx="300" cy="450" r="7"   fill="#e4e0d8"/>
+      </svg>
+      <figcaption>Axis, 2024</figcaption>
+    </figure>
+
+    <figure onclick="openLB(4)">
+      <svg viewBox="0 0 600 720" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="720" fill="#ebe7df"/>
+        <path d="M 300 80 L 520 580 L 80 580 Z" fill="none" stroke="#a09080" stroke-width="1.2"/>
+        <path d="M 300 160 L 460 560 L 140 560 Z" fill="#c8c0b0" opacity="0.2"/>
+        <path d="M 300 240 L 400 540 L 200 540 Z" fill="none" stroke="#b8b0a0" stroke-width="0.7"/>
+        <circle cx="300" cy="400" r="36" fill="none" stroke="#c8bfb0" stroke-width="1"/>
+        <circle cx="300" cy="400" r="7" fill="#a09080"/>
+      </svg>
+      <figcaption>Triangle Study No. 3, 2024</figcaption>
+    </figure>
+
+    <figure onclick="openLB(5)">
+      <svg viewBox="0 0 600 660" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="660" fill="#dedad2"/>
+        <circle cx="300" cy="330" r="190" fill="none" stroke="#d0c8bc" stroke-width="0.8"/>
+        <circle cx="300" cy="330" r="130" fill="none" stroke="#b8b0a4" stroke-width="1.2"/>
+        <circle cx="300" cy="330" r="75"  fill="none" stroke="#d0c8bc" stroke-width="0.8"/>
+        <circle cx="300" cy="330" r="30"  fill="#a09080" opacity="0.6"/>
+        <line x1="80" y1="100" x2="520" y2="560" stroke="#d0c8bc" stroke-width="0.5"/>
+        <line x1="520" y1="100" x2="80"  y2="560" stroke="#d0c8bc" stroke-width="0.5"/>
+      </svg>
+      <figcaption>Concentric, 2023</figcaption>
+    </figure>
+
+    <figure onclick="openLB(6)">
+      <svg viewBox="0 0 600 780" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="780" fill="#e6e2da"/>
+        <rect x="80" y="80" width="440" height="620" fill="none" stroke="#c0b8a8" stroke-width="1"/>
+        <line x1="80"  y1="390" x2="520" y2="390" stroke="#d8d0c4" stroke-width="0.6"/>
+        <line x1="300" y1="80"  x2="300" y2="700" stroke="#d8d0c4" stroke-width="0.6"/>
+        <circle cx="300" cy="390" r="110" fill="none" stroke="#b0a898" stroke-width="1.2"/>
+        <circle cx="300" cy="390" r="50"  fill="#c8c0b0" opacity="0.3"/>
+        <circle cx="300" cy="390" r="10"  fill="#a09080"/>
+      </svg>
+      <figcaption>Grid Study I, 2024</figcaption>
+    </figure>
+
+    <figure onclick="openLB(7)">
+      <svg viewBox="0 0 600 820" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="820" fill="#f2ede5"/>
+        <path d="M 300 100 Q 500 300 300 500 Q 100 300 300 100 Z" fill="none" stroke="#b0a898" stroke-width="1.2"/>
+        <path d="M 300 180 Q 440 320 300 460 Q 160 320 300 180 Z" fill="#c8c0b0" opacity="0.2"/>
+        <circle cx="300" cy="300" r="30" fill="none" stroke="#b0a898" stroke-width="1"/>
+        <circle cx="300" cy="300" r="7"  fill="#a09080"/>
+        <path d="M 150 600 Q 220 560 300 600 Q 380 640 450 600" stroke="#c8bfb0" stroke-width="1" fill="none"/>
+        <path d="M 120 650 Q 210 610 300 650 Q 390 690 480 650" stroke="#d8d0c4" stroke-width="0.7" fill="none"/>
+      </svg>
+      <figcaption>Vessel, 2024</figcaption>
+    </figure>
+
+    <figure onclick="openLB(8)">
+      <svg viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="700" fill="#e0dcd4"/>
+        <line x1="100" y1="100" x2="500" y2="600" stroke="#b8b0a4" stroke-width="1.2"/>
+        <line x1="100" y1="200" x2="500" y2="500" stroke="#c8c0b4" stroke-width="0.8"/>
+        <line x1="100" y1="300" x2="500" y2="400" stroke="#d0c8bc" stroke-width="0.6"/>
+        <line x1="100" y1="400" x2="500" y2="300" stroke="#d0c8bc" stroke-width="0.6"/>
+        <line x1="100" y1="500" x2="500" y2="200" stroke="#c8c0b4" stroke-width="0.8"/>
+        <line x1="100" y1="600" x2="500" y2="100" stroke="#b8b0a4" stroke-width="1.2"/>
+        <circle cx="300" cy="350" r="60" fill="#ede8e0" opacity="0.7"/>
+        <circle cx="300" cy="350" r="12" fill="#a09080"/>
+      </svg>
+      <figcaption>Convergence, 2023</figcaption>
+    </figure>
+
+  </div>
+</section>
+
+<!-- ── SKETCHBOOK ── -->
+<section class="page" id="page-sketchbook">
+  <div class="sketch-grid">
+
+    <figure>
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="300" fill="#f5f2ec"/>
+        <circle cx="150" cy="150" r="80" fill="none" stroke="#c0b8a8" stroke-width="1"/>
+        <circle cx="150" cy="150" r="6" fill="#a09080"/>
+      </svg>
+    </figure>
+
+    <figure>
+      <svg viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="380" fill="#f0ece4"/>
+        <path d="M 150 40 L 260 300 L 40 300 Z" fill="none" stroke="#b8b0a4" stroke-width="1"/>
+        <circle cx="150" cy="200" r="5" fill="#a09080"/>
+      </svg>
+    </figure>
+
+    <figure>
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="300" fill="#ece8e0"/>
+        <rect x="60" y="60" width="180" height="180" fill="none" stroke="#b0a898" stroke-width="1" transform="rotate(25 150 150)"/>
+        <rect x="80" y="80" width="140" height="140" fill="none" stroke="#c8c0b0" stroke-width="0.7" transform="rotate(10 150 150)"/>
+      </svg>
+    </figure>
+
+    <figure>
+      <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="340" fill="#f2ede5"/>
+        <line x1="40" y1="50" x2="260" y2="290" stroke="#b8b0a4" stroke-width="1"/>
+        <line x1="260" y1="50" x2="40" y2="290" stroke="#c8c0b0" stroke-width="1"/>
+        <circle cx="150" cy="170" r="45" fill="none" stroke="#a09080" stroke-width="0.8"/>
+      </svg>
+    </figure>
+
+    <figure>
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="300" fill="#e8e4dc"/>
+        <path d="M 40 150 Q 100 80 150 150 Q 200 220 260 150" fill="none" stroke="#b0a898" stroke-width="1.2"/>
+        <path d="M 40 180 Q 100 110 150 180 Q 200 250 260 180" fill="none" stroke="#c8c0b0" stroke-width="0.8"/>
+      </svg>
+    </figure>
+
+    <figure>
+      <svg viewBox="0 0 300 360" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="360" fill="#edeae2"/>
+        <circle cx="150" cy="140" r="90" fill="none" stroke="#c0b8a8" stroke-width="0.8"/>
+        <circle cx="150" cy="140" r="50" fill="none" stroke="#b0a898" stroke-width="1"/>
+        <circle cx="150" cy="140" r="18" fill="#c8c0b0" opacity="0.5"/>
+      </svg>
+    </figure>
+
+    <figure>
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="300" fill="#f0ece4"/>
+        <line x1="50" y1="150" x2="250" y2="150" stroke="#b8b0a4" stroke-width="1"/>
+        <line x1="150" y1="50" x2="150" y2="250" stroke="#b8b0a4" stroke-width="1"/>
+        <rect x="100" y="100" width="100" height="100" fill="none" stroke="#c0b8a8" stroke-width="0.8"/>
+        <circle cx="150" cy="150" r="5" fill="#a09080"/>
+      </svg>
+    </figure>
+
+    <figure>
+      <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="400" fill="#e4e0d8"/>
+        <path d="M 60 200 Q 150 60 240 200 Q 150 340 60 200 Z" fill="none" stroke="#a09080" stroke-width="1"/>
+        <circle cx="150" cy="200" r="5" fill="#a09080"/>
+      </svg>
+    </figure>
+
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="page" id="page-about">
+  <div class="about-wrap">
+    <h2>About</h2>
+    <p>1800Ratmail is the studio practice of [Your Name] — a digital illustrator working at the intersection of geometry, texture, and quiet feeling.</p>
+    <p>Each piece begins as a hand-drawn sketch before moving into digital, where precision meets intuition. The work explores recurring motifs: the circle, the grid, the horizon line — forms that carry meaning without demanding it.</p>
+    <p>Available for commissions, editorial illustration, and limited print editions. Based in [Your City].</p>
+    <p style="margin-top:2rem; font-size:12px; color:#999;">For enquiries: <a href="#" onclick="showPage('contact'); return false;" style="color:#111; text-underline-offset:3px;">contact →</a></p>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="page" id="page-contact">
+  <div class="contact-wrap">
+    <h2>Contact</h2>
+    <p>For commissions, print orders, or anything else — send a message and I'll get back to you within a few days.</p>
+    <form class="form-stack" onsubmit="submitForm(event)">
+      <div>
+        <label>name</label>
+        <input type="text" placeholder="Your name" />
+      </div>
+      <div>
+        <label>email</label>
+        <input type="email" placeholder="your@email.com" />
+      </div>
+      <div>
+        <label>message</label>
+        <textarea placeholder="What's on your mind…"></textarea>
+      </div>
+      <button type="submit" class="btn-send">send</button>
+      <p class="form-ok" id="form-ok">thank you — i'll be in touch soon.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ── SHOP ── -->
+<section class="page" id="page-shop">
+  <div class="shop-grid">
+
+    <div class="shop-item">
+      <figure>
+        <svg viewBox="0 0 600 750" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="750" fill="#f0ece4"/>
+          <circle cx="300" cy="340" r="180" fill="none" stroke="#c8bfb0" stroke-width="1.5"/>
+          <circle cx="300" cy="340" r="90" fill="#d8d0c0" opacity="0.4"/>
+          <ellipse cx="300" cy="340" rx="60" ry="180" fill="none" stroke="#a09080" stroke-width="1"/>
+          <ellipse cx="300" cy="340" rx="180" ry="60" fill="none" stroke="#a09080" stroke-width="1"/>
+          <circle cx="300" cy="340" r="8" fill="#a09080"/>
+        </svg>
+      </figure>
+      <div class="shop-info">
+        <div class="shop-title">Untitled I — giclée print</div>
+        <div class="shop-price">$85 · edition of 25</div>
+        <a href="#contact" class="shop-btn" onclick="showPage('contact'); return false;">enquire</a>
+      </div>
+    </div>
+
+    <div class="shop-item">
+      <figure>
+        <svg viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="800" fill="#e8e4dc"/>
+          <path d="M 100 400 Q 300 100 500 400 Q 300 700 100 400 Z" fill="none" stroke="#b0a898" stroke-width="1.2"/>
+          <circle cx="300" cy="400" r="40" fill="none" stroke="#b0a898" stroke-width="1.2"/>
+          <circle cx="300" cy="400" r="9" fill="#a09080"/>
+        </svg>
+      </figure>
+      <div class="shop-info">
+        <div class="shop-title">Solstice — giclée print</div>
+        <div class="shop-price">$95 · edition of 25</div>
+        <a href="#contact" class="shop-btn" onclick="showPage('contact'); return false;">enquire</a>
+      </div>
+    </div>
+
+    <div class="shop-item">
+      <figure>
+        <svg viewBox="0 0 600 720" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="720" fill="#ebe7df"/>
+          <path d="M 300 80 L 520 580 L 80 580 Z" fill="none" stroke="#a09080" stroke-width="1.2"/>
+          <path d="M 300 160 L 460 560 L 140 560 Z" fill="#c8c0b0" opacity="0.2"/>
+          <circle cx="300" cy="400" r="36" fill="none" stroke="#c8bfb0" stroke-width="1"/>
+          <circle cx="300" cy="400" r="7" fill="#a09080"/>
+        </svg>
+      </figure>
+      <div class="shop-info">
+        <div class="shop-title">Triangle Study No. 3 — print</div>
+        <div class="shop-price">$75 · edition of 25</div>
+        <a href="#contact" class="shop-btn" onclick="showPage('contact'); return false;">enquire</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div id="lb" onclick="closeLBbg(event)">
+  <button id="lb-close" onclick="closeLB()">close ✕</button>
+  <button class="lb-arrow" id="lb-prev" onclick="stepLB(-1)">&#8592;</button>
+  <div id="lb-inner">
+    <div id="lb-img"></div>
+    <div id="lb-caption"></div>
+  </div>
+  <button class="lb-arrow" id="lb-next" onclick="stepLB(1)">&#8594;</button>
+</div>
+
+<script>
+// Page switching
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// Lightbox
+const figures = Array.from(document.querySelectorAll('#work-grid figure'));
+let currentIdx = 0;
+
+function openLB(idx) {
+  currentIdx = idx;
+  renderLB();
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderLB() {
+  const fig = figures[currentIdx];
+  const imgWrap = document.getElementById('lb-img');
+  imgWrap.innerHTML = '';
+  const clone = fig.querySelector('svg, img').cloneNode(true);
+  imgWrap.appendChild(clone);
+  document.getElementById('lb-caption').textContent = fig.querySelector('figcaption')?.textContent || '';
+}
+
+function stepLB(dir) {
+  currentIdx = (currentIdx + dir + figures.length) % figures.length;
+  renderLB();
+}
+
+function closeLB() {
+  document.getElementById('lb').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeLBbg(e) {
+  if (e.target === document.getElementById('lb')) closeLB();
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lb').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLB();
+  if (e.key === 'ArrowLeft')  stepLB(-1);
+  if (e.key === 'ArrowRight') stepLB(1);
+});
+
+// Contact form
+function submitForm(e) {
+  e.preventDefault();
+  document.getElementById('form-ok').style.display = 'block';
+  e.target.reset();
+}
+</script>
+</body>
+</html>
